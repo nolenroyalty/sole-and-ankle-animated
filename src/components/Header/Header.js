@@ -8,6 +8,7 @@ import UnstyledButton from "../UnstyledButton";
 import SuperHeader from "../SuperHeader";
 import MobileMenu from "../MobileMenu";
 import VisuallyHidden from "../VisuallyHidden";
+import NavLink from "../NavLink";
 
 const Header = () => {
   const [showMobileMenu, setShowMobileMenu] = React.useState(false);
@@ -20,12 +21,14 @@ const Header = () => {
           <Logo />
         </LogoWrapper>
         <DesktopNav>
-          <NavLinkContainer href="/sale">Sale</NavLinkContainer>
-          <NavLinkContainer href="/new">New&nbsp;Releases</NavLinkContainer>
-          <NavLinkContainer href="/men">Men</NavLinkContainer>
-          <NavLinkContainer href="/women">Women</NavLinkContainer>
-          <NavLinkContainer href="/kids">Kids</NavLinkContainer>
-          <NavLinkContainer href="/collections">Collections</NavLinkContainer>
+          <NavLink animation="rotate" href="/sale">
+            Sale
+          </NavLink>
+          <NavLink href="/new">New&nbsp;Releases</NavLink>
+          <NavLink href="/men">Men</NavLink>
+          <NavLink href="/women">Women</NavLink>
+          <NavLink href="/kids">Kids</NavLink>
+          <NavLink href="/collections">Collections</NavLink>
         </DesktopNav>
         <MobileActions>
           <ShoppingBagButton>
@@ -114,17 +117,32 @@ const Filler = styled.div`
   }
 `;
 
-const NavLinkContainer = ({ children, ...delegated }) => {
-  return (
-    <NavLinkContainerAux {...delegated}>
-      <NavLinkUnselected>{children}</NavLinkUnselected>
-      <NavLinkSelected>{children}</NavLinkSelected>
-    </NavLinkContainerAux>
-  );
+const NavLinkContainer = ({
+  animation = "dropdown",
+  children,
+  ...delegated
+}) => {
+  if (animation === "dropdown") {
+    return (
+      <NavLinkContainerAux {...delegated}>
+        <NavLinkUnselected>{children}</NavLinkUnselected>
+        <NavLinkSelected>{children}</NavLinkSelected>
+      </NavLinkContainerAux>
+    );
+  } else if (animation === "rotate") {
+    return (
+      <NavLinkContainerAux {...delegated}>
+        <NavLinkRotationUnselected>{children}</NavLinkRotationUnselected>
+        <NavLinkRotationSelected>{children}</NavLinkRotationSelected>
+      </NavLinkContainerAux>
+    );
+  }
+  return null;
 };
 
 const NavLinkContainerAux = styled.a`
   display: grid;
+  perspective: 1000px;
   grid-template-areas: "sole-area";
   overflow: hidden;
   font-size: 1.125rem;
@@ -140,12 +158,39 @@ const NavLinkContainerAux = styled.a`
 
 const NavLinkSelection = styled.span`
   grid-area: sole-area;
+
   display: inline-block;
   will-change: transform;
   transition: transform 1s ease;
 
   ${NavLinkContainerAux}:hover &, ${NavLinkContainerAux}:focus & {
     transition: transform 0.3s ease-in-out 0.1s;
+  }
+`;
+
+const NavLinkRotationUnselected = styled(NavLinkSelection)`
+  transform: rotateX(0deg);
+  perspective: inherit;
+  transform-style: preserve-3d;
+  background-color: green;
+  transform-origin: 50% 0%;
+  font-weight: ${WEIGHTS.medium};
+
+  ${NavLinkContainerAux}:hover &, ${NavLinkContainerAux}:focus & {
+    /* transform: rotateX(90deg); */
+  }
+`;
+
+const NavLinkRotationSelected = styled(NavLinkSelection)`
+  transform: rotateX(-90deg);
+  perspective: inherit;
+  transform-style: preserve-3d;
+  background-color: slategrey;
+  transform-origin: 50% 100%;
+  font-weight: ${WEIGHTS.bold};
+
+  ${NavLinkContainerAux}:hover &, ${NavLinkContainerAux}:focus & {
+    /* transform: rotateX(0deg); */
   }
 `;
 

@@ -5,6 +5,7 @@
   "dependencies": {
     "@reach/dialog": "0.15.0",
     "date-fns": "2.16.1",
+    "new-component": "^5.0.2",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-feather": "2.0.9",
@@ -15,7 +16,8 @@
     "start": "NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "new-component": "new-component"
   },
   "eslintConfig": {
     "extends": [
