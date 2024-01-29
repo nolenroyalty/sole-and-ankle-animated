@@ -56,32 +56,27 @@ const RotationWrapper = styled.div`
 const RotationLink = styled.span`
   display: block;
   transform-style: preserve-3d;
-  transition: transform 0.5s, opacity 0.5s;
+  will-change: transform, opacity;
+  transition: transform 0.5s;
+  transform-origin: 50% 100%;
+
+  transform: rotateX(var(--rotation-start));
+
+  ${RotationWrapper}:hover & {
+    transform: rotateX(var(--rotation-end));
+  }
 `;
 
 const MainRotation = styled(RotationLink)`
-  transform-style: preserve-3d;
-  transform-origin: 50% 100%;
-
-  ${RotationWrapper}:hover & {
-    transform: rotateX(90deg);
-    opacity: 0;
-  }
+  --rotation-start: 0deg;
+  --rotation-end: 95deg;
 `;
 
 const HoverRotation = styled(RotationLink)`
-  transform-style: preserve-3d;
-  transform: rotateX(-90deg) translateY(100%);
-  transform-origin: 50% 100%;
-  opacity: 0;
+  --rotation-start: -90deg;
+  --rotation-end: 0deg;
 
   font-weight: ${WEIGHTS.bold};
-
-  ${RotationWrapper}:hover & {
-    transform: rotateX(0deg);
-    opacity: 1;
-  }
-
   position: absolute;
   top: 0;
   left: 0;
