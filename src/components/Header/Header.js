@@ -1,13 +1,13 @@
-import React from 'react';
-import styled from 'styled-components/macro';
+import React from "react";
+import styled from "styled-components/macro";
 
-import { QUERIES, WEIGHTS } from '../../constants';
-import Logo from '../Logo';
-import Icon from '../Icon';
-import UnstyledButton from '../UnstyledButton';
-import SuperHeader from '../SuperHeader';
-import MobileMenu from '../MobileMenu';
-import VisuallyHidden from '../VisuallyHidden';
+import { QUERIES, WEIGHTS } from "../../constants";
+import Logo from "../Logo";
+import Icon from "../Icon";
+import UnstyledButton from "../UnstyledButton";
+import SuperHeader from "../SuperHeader";
+import MobileMenu from "../MobileMenu";
+import VisuallyHidden from "../VisuallyHidden";
 
 const Header = () => {
   const [showMobileMenu, setShowMobileMenu] = React.useState(false);
@@ -20,12 +20,12 @@ const Header = () => {
           <Logo />
         </LogoWrapper>
         <DesktopNav>
-          <NavLink href="/sale">Sale</NavLink>
-          <NavLink href="/new">New&nbsp;Releases</NavLink>
-          <NavLink href="/men">Men</NavLink>
-          <NavLink href="/women">Women</NavLink>
-          <NavLink href="/kids">Kids</NavLink>
-          <NavLink href="/collections">Collections</NavLink>
+          <NavLinkContainer href="/sale">Sale</NavLinkContainer>
+          <NavLinkContainer href="/new">New&nbsp;Releases</NavLinkContainer>
+          <NavLinkContainer href="/men">Men</NavLinkContainer>
+          <NavLinkContainer href="/women">Women</NavLinkContainer>
+          <NavLinkContainer href="/kids">Kids</NavLinkContainer>
+          <NavLinkContainer href="/collections">Collections</NavLinkContainer>
         </DesktopNav>
         <MobileActions>
           <ShoppingBagButton>
@@ -114,15 +114,56 @@ const Filler = styled.div`
   }
 `;
 
-const NavLink = styled.a`
+const NavLinkContainer = ({ children, ...delegated }) => {
+  return (
+    <NavLinkContainerAux {...delegated}>
+      <NavLinkUnselected>{children}</NavLinkUnselected>
+      <NavLinkSelected>{children}</NavLinkSelected>
+    </NavLinkContainerAux>
+  );
+};
+
+const NavLinkContainerAux = styled.a`
+  display: grid;
+  grid-template-areas: "sole-area";
+  overflow: hidden;
   font-size: 1.125rem;
+  display: inine-block;
   text-transform: uppercase;
   text-decoration: none;
   color: var(--color-gray-900);
-  font-weight: ${WEIGHTS.medium};
 
   &:first-of-type {
     color: var(--color-secondary);
+  }
+`;
+
+const NavLinkSelection = styled.span`
+  grid-area: sole-area;
+  display: inline-block;
+  will-change: transform;
+  transition: transform 1s ease;
+
+  ${NavLinkContainerAux}:hover &, ${NavLinkContainerAux}:focus & {
+    transition: transform 0.3s ease-in-out 0.1s;
+  }
+`;
+
+const NavLinkUnselected = styled(NavLinkSelection)`
+  transform: translateY(0%);
+  font-weight: ${WEIGHTS.medium};
+
+  ${NavLinkContainerAux}:hover &, ${NavLinkContainerAux}:focus & {
+    transform: translateY(-150%);
+  }
+`;
+
+const NavLinkSelected = styled(NavLinkSelection)`
+  transform: translateY(150%);
+  font-weight: ${WEIGHTS.bold};
+
+  ${NavLinkContainerAux}:hover &, ${NavLinkContainerAux}:focus & {
+    transform: translateY(0%);
   }
 `;
 
