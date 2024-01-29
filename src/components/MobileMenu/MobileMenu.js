@@ -1,17 +1,20 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
-import styled from 'styled-components/macro';
-import { DialogOverlay, DialogContent } from '@reach/dialog';
+import React from "react";
+// import styled from "styled-components/macro";
+import styled, { keyframes, css } from "styled-components";
 
-import { QUERIES, WEIGHTS } from '../../constants';
+import { DialogOverlay, DialogContent } from "@reach/dialog";
 
-import UnstyledButton from '../UnstyledButton';
-import Icon from '../Icon';
-import VisuallyHidden from '../VisuallyHidden';
+import { QUERIES, WEIGHTS } from "../../constants";
+
+import UnstyledButton from "../UnstyledButton";
+import Icon from "../Icon";
+import VisuallyHidden from "../VisuallyHidden";
 
 const MobileMenu = ({ isOpen, onDismiss }) => {
   return (
     <Overlay isOpen={isOpen} onDismiss={onDismiss}>
+      <Background />
       <Content aria-label="Menu">
         <CloseButton onClick={onDismiss}>
           <Icon id="close" />
@@ -36,24 +39,59 @@ const MobileMenu = ({ isOpen, onDismiss }) => {
   );
 };
 
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+
+  to { opacity: 1; }
+`;
+
 const Overlay = styled(DialogOverlay)`
   position: fixed;
+  will-change: opacity;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const Background = styled.div`
+  position: fixed;
+  will-change: opacity;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background: var(--color-backdrop);
-  display: flex;
-  justify-content: flex-end;
+
+  animation: ${fadeIn} 0.3s ease-in forwards;
 `;
+
+const slideIn = keyframes(css`
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+`);
 
 const Content = styled(DialogContent)`
   background: white;
+  opacity: 1;
+  position: absolute;
+
   width: 300px;
   height: 100%;
   padding: 24px 32px;
   display: flex;
   flex-direction: column;
+
+  animation: ${slideIn} 1s ease-out both;
 `;
 
 const CloseButton = styled(UnstyledButton)`
