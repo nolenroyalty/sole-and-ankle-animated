@@ -39,14 +39,24 @@ const ShoeCard = ({
           <Image alt="" src={imageSrc} />
           {variant === "on-sale" && (
             <SaleFlag>
-              <NewFlagText totalTime={0.5} animationPercent={0.8} text="Sale" />
+              <NewFlagText
+                totalTime={0.5}
+                speedFactor={1.5}
+                animationPercent={0.8}
+                jumpUpEnd={-1}
+                jumpUpStart={-6}
+                text="Sale"
+              />
             </SaleFlag>
           )}
           {variant === "new-release" && (
             <NewFlag>
               <NewFlagText
-                totalTime={0.8}
-                animationPercent={0.45}
+                totalTime={0.75}
+                animationPercent={0.25}
+                speedFactor={0.45}
+                jumpUpStart={-8}
+                jumpUpEnd={-2}
                 text="Just released!"
               />
             </NewFlag>
@@ -77,9 +87,14 @@ const ShoeCard = ({
   );
 };
 
-const NewFlagText = ({ text, totalTime = 0.8, animationPercent = 0.4 }) => {
-  const SPEED_FACTOR = 1.25;
-
+const NewFlagText = ({
+  text,
+  speedFactor = 0.5,
+  totalTime = 0.8,
+  animationPercent = 0.4,
+  jumpUpEnd = -3,
+  jumpUpStart = -12,
+}) => {
   function animationDelay(position) {
     return (
       (position / text.length) * (totalTime - totalTime * animationPercent)
@@ -89,7 +104,7 @@ const NewFlagText = ({ text, totalTime = 0.8, animationPercent = 0.4 }) => {
   function animationTime(position) {
     const baseTime = totalTime * animationPercent;
     const speedDivisor =
-      SPEED_FACTOR - ((SPEED_FACTOR - 0.75) * (position + 1)) / text.length;
+      speedFactor - ((speedFactor - 0.75) * (position + 1)) / text.length;
     console.log(
       `baseTime: ${baseTime}, speedDivisor: ${speedDivisor}, position: ${position}`
     );
@@ -97,10 +112,8 @@ const NewFlagText = ({ text, totalTime = 0.8, animationPercent = 0.4 }) => {
   }
 
   function jumpUpAmount(position) {
-    const finalAmount = -3;
-    const startAmount = -10;
-    const startingPart = (startAmount * (text.length - position)) / text.length;
-    const endingPart = (finalAmount * position) / text.length;
+    const startingPart = (jumpUpStart * (text.length - position)) / text.length;
+    const endingPart = (jumpUpEnd * position) / text.length;
     return startingPart + endingPart;
   }
 
