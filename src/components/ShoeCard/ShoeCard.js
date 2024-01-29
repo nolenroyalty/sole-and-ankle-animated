@@ -45,8 +45,8 @@ const ShoeCard = ({
           {variant === "new-release" && (
             <NewFlag>
               <NewFlagText
-                totalTime={0.9}
-                animationPercent={0.5}
+                totalTime={0.8}
+                animationPercent={0.45}
                 text="Just released!"
               />
             </NewFlag>
@@ -78,7 +78,7 @@ const ShoeCard = ({
 };
 
 const NewFlagText = ({ text, totalTime = 0.8, animationPercent = 0.4 }) => {
-  const SPEED_FACTOR = 2;
+  const SPEED_FACTOR = 1.25;
 
   function animationDelay(position) {
     return (
@@ -96,12 +96,21 @@ const NewFlagText = ({ text, totalTime = 0.8, animationPercent = 0.4 }) => {
     return baseTime / speedDivisor + "s";
   }
 
+  function jumpUpAmount(position) {
+    const finalAmount = -3;
+    const startAmount = -10;
+    const startingPart = (startAmount * (text.length - position)) / text.length;
+    const endingPart = (finalAmount * position) / text.length;
+    return startingPart + endingPart;
+  }
+
   return [...text].map((char, i) => (
     <FlagChar
       key={i}
       style={{
         "--animation-time": animationTime(i),
-        "--animation-delay": 0.175 + animationDelay(i) + "s",
+        "--animation-delay": 0.1 + animationDelay(i) + "s",
+        "--jump-up-amount": jumpUpAmount(i) + "px",
       }}
     >
       {char}
@@ -143,7 +152,7 @@ const bumpUpAnimation = keyframes`
   }
 
   50% {
-    transform: translateY(-6px);
+    transform: translateY(var(--jump-up-amount));
   }
 
   100% {
